@@ -15,7 +15,8 @@
       </div>
 
       <div class="mt-3">
-        <button class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">create</button>
+        {{-- <a href="{{ route('article.create') }}" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">create</a> --}}
+        <a href="{{ route('article.create') }}" class="btn btn-success mb-2" >create</a>
        
         @if ($errors->any())
         <div class="mt-3">
@@ -45,42 +46,11 @@
                 <th>View</th>
                 <th>Status</th>
                 <th>publish_date</th>
-                <th>created_at</th>
+                {{-- <th>created_at</th> --}}
                 <th>function</th>
             </thead>
             <tbody>
-                @forelse ($articles as $item)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->title }}</td>
-                        <td>{{ $item->GetCategory->name }}</td>
-                        <td>{{ $item->views }} x</td>
-                        @if ($item->status == 0)
-                            <td>
-                                <span class="badge bg-danger">Private</span>
-                            </td>
-                            
-                        @else
-                                <td>
-                                    <span class="badge bg-success">Published</span>
-                                </td>
-                            
-                        @endif
-                        
-                        
-                        <td>{{ $item->publish_date  }}</td>
-                        <td>{{ $item->created_at  }}</td>
-                        <td class="text-center">
-                            <a href="" class="btn btn-secondary">detail</a>
-                            <a href="" class="btn btn-primary">edit</a>
-                            <a href="" class="btn btn-danger">delete</a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-center">kosong</td>
-                    </tr>
-                @endforelse
+                
               
             </tbody>
         </table>
@@ -100,7 +70,43 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable();
+            $('#dataTable').DataTable({
+                processing: true,
+                serverside: true,
+                ajax:'{{ url()->current() }}',
+                columns:[
+                    {
+                        data:'id',
+                        name:'id',
+                    },
+                    {
+                        data:'title',
+                        name:'title',
+                    },
+                    {
+                        data:'category_id',
+                        name:'category_id',
+                    },
+                    {
+                        data:'views',
+                        name:'views',
+                    },
+                    {
+                        data:'status',
+                        name:'status',
+                    },
+                    {
+                        data:'publish_date',
+                        name:'publish_date',
+                    },
+                    {
+                        data:'button',
+                        name:'button',
+                    },
+                  
+
+                ],
+        });
         } );
     </script>
 

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Back;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Article;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Category;
+use Yajra\DataTables\Facades\DataTables;
+
 
 class ArticleController extends Controller
 {
@@ -13,10 +16,36 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles= Article::with('GetCategory')->latest()->get();
+        if(request()->ajax()){
+            $articles= Article::with('GetCategory')->latest()->get();
+            
+            return DataTables::of($articles)
+        //   custom kolom
+            ->addColumn('category_id', function ($articles){
+                return $articles->GetCategory->name;
+            })
+            ->addColumn('status', function ($articles){
+                if ($articles->status == 0){
+                    return '<span class="badge bg-danger">Draft</span>';
+                }else{
+                    return '<span class="badge bg-success">Publish</span>';
+                }
+                
+            })
+            ->addColumn('button', function ($articles){
+                return '<div class="text-center">
+                            <a href="" class="btn btn-secondary">detail</a>
+                            <a href="" class="btn btn-primary">edit</a>
+                            <a href="" class="btn btn-danger">delete</a>
+                        </div>';
+            })
+            // panggil kustom kolom
+            ->rawColumns(['category_id', 'status','button'])
+            ->make();
+        }
 
         // return $articles;
-        return view('Back.article.index', compact('articles'));
+        return view('Back.article.index');
     }
 
     /**
@@ -24,7 +53,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        $category = Category::all();
+        return view('Back.article.create', compact('category'));
     }
 
     /**
