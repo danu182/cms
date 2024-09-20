@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->longText('description');
-            $table->string('img');
-            $table->integer('views');
+            $table->string('img')->nullable();
+            $table->integer('views')->default(0);
             $table->string('status');
             $table->date('publish_date');
 

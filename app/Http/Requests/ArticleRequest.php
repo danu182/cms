@@ -26,7 +26,7 @@ class ArticleRequest extends FormRequest
             'title'         => 'required',
             'slug'          => 'nullable',
             'description'   => 'required',
-            'img'           => 'required|image|file|mimes:jpeg,png,jpg,webp|max:2048',
+            'image'         => 'required|image|file|mimes:jpeg,png,jpg,webp|max:2048',
             // 'views'      => 'required|integer',
             'status'        => 'required',
             'publish_date'  => 'required|date',

@@ -26,7 +26,7 @@
             </div>
         @endif
        
-       <form action="" method="POST" enctype="multipart/form-data">
+       <form action="{{ route('article.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-6">
@@ -35,21 +35,53 @@
                         <label for="title">title</label>
                         <input type="text" name="title" class="form-control" id="" value="{{ old('title') }}">
                     </div>
+                
+                </div>
+                <div class="col-6">
+                    <div class="mb-3">
+                        <label for="category">category</label>
+                        <select name="category_id" id="" class="form-control">
+                                    <option value="" hidden >-- pilih salah satu ---</option>
+                                @foreach ($category as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
 
+
+                    <div class="mb-3">
+                        <label for="description">description</label>
+                        <textarea name="description" id="description" cols="30" rows="10" class="form-control">{{ old('description') }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image">image</label>
+                        <input type="file" name="image" id="image" class="form-control">
+                    </div>
+
+                <div class="row">
                     <div class="col-6">
                         <div class="mb-3">
-                            <label for="category">category</label>
-                            <select name="category_id" id="" class="form-control">
-                                        <option value="" hidden >-- pilih salah satu ---</option>
-                                    @foreach ($category as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
+                            <label for="status">status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="" hidden>pilih salah satu</option>
+                                <option value="1">publish</option>
+                                <option value="0">draft</option>
                             </select>
                         </div>
                     </div>
-                
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="publish_date">publish_date</label>
+                            <input type="date" name="publish_date" id="publish_date" class="form-control" value="{{ old('publish_date') }}">
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="float-end">
+                    <button type="submit" class="btn btn-success">simpan</button>
+                </div>
        </form>
 
 

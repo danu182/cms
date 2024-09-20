@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Back;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ArticleRequest;
 use App\Models\Category;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 
 class ArticleController extends Controller
@@ -60,9 +62,26 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ArticleRequest $request)
     {
-        //
+        $data=$request->validated();
+
+        
+
+        $file=$request->file('image');
+        $data['slug']=STR::slug($data['title']);
+        $filename=uniqid().'-'.$data['slug'].'.'.$file->getClientOriginalExtension();
+        $file->storeAs('public/back', $filename);
+
+
+        $data['image']=$filename;
+
+        // return $data;
+
+        Article::create($data);
+
+        return redirect()->route('article.index')->with('success', 'data artcle has been created');
+
     }
 
     /**
