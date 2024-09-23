@@ -22,6 +22,7 @@ class ArticleController extends Controller
             $articles= Article::with('GetCategory')->latest()->get();
             
             return DataTables::of($articles)
+            ->addIndexColumn() //untuk nomor urut baris otomatis dari datatable
         //   custom kolom
             ->addColumn('category_id', function ($articles){
                 return $articles->GetCategory->name;
@@ -36,7 +37,7 @@ class ArticleController extends Controller
             })
             ->addColumn('button', function ($articles){
                 return '<div class="text-center">
-                            <a href="" class="btn btn-secondary">detail</a>
+                            <a href="'.route('article.show', $articles->id).'" class="btn btn-secondary">detail</a>
                             <a href="" class="btn btn-primary">edit</a>
                             <a href="" class="btn btn-danger">delete</a>
                         </div>';
@@ -65,16 +66,14 @@ class ArticleController extends Controller
     public function store(ArticleRequest $request)
     {
         $data=$request->validated();
-
         
-
         $file=$request->file('image');
         $data['slug']=STR::slug($data['title']);
         $filename=uniqid().'-'.$data['slug'].'.'.$file->getClientOriginalExtension();
-        $file->storeAs('public/back', $filename);
+        $file->storeAs('public/back/img', $filename);
 
 
-        $data['image']=$filename;
+        $data['img']=$filename;
 
         // return $data;
 
@@ -87,9 +86,11 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show( string $id)
     {
-        //
+        $article = Article::findOrFail($id);
+        // return $article;
+        return view('Back.article.show' , compact('article'));
     }
 
     /**

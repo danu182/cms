@@ -5,13 +5,13 @@
 
 @endpush
 
-@section('title', "lsit Artikel admin")
+@section('title', "Detail Artikel admin")
     
 
 @section('content')
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">article</h1>
+        <h1 class="h2">Detail article</h1>
       </div>
 
       <div class="mt-3">
@@ -38,22 +38,51 @@
             </div>
         @endif
        
-        <table class="table table-striped table-hover" id="dataTable">
-            <thead>
-                <th>no</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>View</th>
-                <th>Status</th>
-                <th>publish_date</th>
-                {{-- <th>created_at</th> --}}
-                <th>function</th>
-            </thead>
-            <tbody>
-                
-              
-            </tbody>
-        </table>
+        <div class="mt-3">
+            <table class="table table-bordered table-striped" id="">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ $article->title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>{{ $article->GetCategory->name }}</td>
+                    </tr>
+                    <tr>
+                        <th>slug</th>
+                        <td>{{ $article->slug }}</td>
+                    </tr>
+                    <tr>
+                        <th>description</th>
+                        <td>{{ $article->description }}</td>
+                    </tr>
+                    <tr>
+                        <th>img</th>
+                        <td>
+                            <a href="{{ asset('storage/back/img/'.$article->img) }}" target="_blank">
+                            <img src="{{ asset('storage/back/img/'.$article->img) }}" alt="" width="50%"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>views</th>
+                        <td>{{ $article->views }}</td>
+                    </tr>
+                    <tr>
+                        <th>status</th>
+                            @if ( $article->status ==0 )
+                                <td> <span class="badge bg-danger">draft</span></td>
+                            @else
+                                <td> <span class="badge bg-success">publish</span></td>
+                            @endif
+                    </tr>
+                </thead>
+                <div class="float-end">
+                    <a href="{{ route('article.index') }}" class="btn btn-secondary">Back</a>
+                </div>
+            </table>
+
+        </div>
       </div>
 
      
