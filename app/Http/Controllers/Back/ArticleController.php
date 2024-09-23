@@ -6,7 +6,9 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArticleRequest;
+use App\Http\Requests\ArticleUpdateRequest;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 
@@ -38,7 +40,7 @@ class ArticleController extends Controller
             ->addColumn('button', function ($articles){
                 return '<div class="text-center">
                             <a href="'.route('article.show', $articles->id).'" class="btn btn-secondary">detail</a>
-                            <a href="" class="btn btn-primary">edit</a>
+                            <a href="'.route('article.edit', $articles->id).'" class="btn btn-primary">edit</a>
                             <a href="" class="btn btn-danger">delete</a>
                         </div>';
             })
@@ -98,15 +100,40 @@ class ArticleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $article = Article::findOrFail($id);
+        $categories= Category::all();
+        return view('Back.article.edit', compact('article','categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ArticleUpdateRequest $request, string $id)
     {
-        //
+        $data=$request->validated();
+    
+        if ($request->hasFile('img')) {
+            // jika ada perubahan gambar 
+            $file=$request->file('img');
+            $data['slug']=STR::slug($data['title']);
+            $filename=uniqid().'-'.$data['slug'].'.'.$file->getClientOriginalExtension();
+            $file->storeAs('public/back/img', $filename);
+            
+            // unlink atua delete file gambar 
+            Storage::delete(['public/back/img'. $request->oldImg]);
+            $data['img']=$filename;
+            
+        } else {
+            // kalo tida ada gambar baru
+            $data['img']=$request->oldImg;
+        }
+        $data['slug']=Str::slug($data['title']);
+        
+
+        Article::find($id)->update($data);
+
+        return redirect()->route('article.index')->with('success', 'data artcle has been Updated successfully');
+
     }
 
     /**
