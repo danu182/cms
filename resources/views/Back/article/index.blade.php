@@ -30,14 +30,19 @@
             </div>
         @endif
 
-        @if(session('success'))
+        {{-- @if(session('success'))
             <div class="mt-3">
                 <div class="alert alert-success">
                         {{ session('success') }}
                 </div>
             </div>
-        @endif
+        @endif --}}
        
+        {{-- sweet alert satrt --}}
+        <div class="swal" data-swal="{{ session('success') }}">
+        </div>
+        {{-- sweet alert end --}}
+
         <table class="table table-striped table-hover" id="dataTable">
             <thead>
                 <th>no</th>
@@ -66,8 +71,25 @@
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> --}}
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+    {{-- sweet alert success start --}}
+    <script>
+        const swall= $('.swal').data('swal');
+        if(swall){
+            Swal.fire({
+                title: "Good job!",
+                text: swall,
+                icon: "success",
+                showConfirmButton: false,
+                timer:2500,
+                });
+        }
+    </script>
+    {{-- sweet alert success end --}}
+
+    {{-- data table start --}}
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
@@ -109,5 +131,6 @@
         });
         } );
     </script>
+    {{-- data table end --}}
 
 @endpush
