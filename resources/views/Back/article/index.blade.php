@@ -56,7 +56,6 @@
             </thead>
             <tbody>
                 
-              
             </tbody>
         </table>
       </div>
@@ -86,6 +85,7 @@
                 timer:2500,
                 });
         }
+
     </script>
     {{-- sweet alert success end --}}
 

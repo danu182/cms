@@ -39,9 +39,17 @@ class ArticleController extends Controller
             })
             ->addColumn('button', function ($articles){
                 return '<div class="text-center">
-                            <a href="'.route('article.show', $articles->id).'" class="btn btn-secondary">detail</a>
                             <a href="'.route('article.edit', $articles->id).'" class="btn btn-primary">edit</a>
-                            <a href="" class="btn btn-danger">delete</a>
+                            <a href="'.route('article.show', $articles->id).'" class="btn btn-secondary">detail</a>    
+                            
+                            <form class="inline-block" action="' . route('article.destroy', $articles->id) . '" method="POST">
+                        <button class="btn btn-danger" >
+                            Hapus
+                        </button>
+                            ' . method_field('delete') . csrf_field() . '
+                        </form>
+
+
                         </div>';
             })
             // panggil kustom kolom
@@ -141,6 +149,15 @@ class ArticleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       // Temukan data berdasarkan ID
+        $data = Article::findOrFail($id);
+        // return $data;
+        // $des='public/back/img/'.$data->img;
+        // return $des;
+        Storage::delete('public/back/img/'.$data->img);
+        $data->delete();
+
+        return redirect()->route('article.index')->with('success', 'data article has been Delete successfully');
+
     }
 }

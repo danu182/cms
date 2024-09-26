@@ -12,7 +12,7 @@
 
       <div class="mt-3">
         {{-- <a href="{{ route('article.create') }}" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">create</a> --}}
-        <a href="{{ route('article.create') }}" class="btn btn-success mb-2" >create</a>
+        {{-- <a href="{{ route('article.create') }}" class="btn btn-success mb-2" >create</a> --}}
        
         @if ($errors->any())
         <div class="mt-3">
@@ -25,7 +25,12 @@
                 </div>
             </div>
         @endif
-       
+       <div class="row">
+           <div class="float-end">
+               <a href="{{ route('article.index') }}" class="btn btn-info">back</a>
+           </div>
+
+       </div>
        <form action="{{ route('article.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
